@@ -1,0 +1,19 @@
+WORKING WIHT SEED DATA
+When working with nay application involving a daabse, its a good ides to populate
+your databse with some realistic data when you ar working on building new features.
+in SQLAlchemy and ORM this is called seeding the database
+in this lesson well see some of the convections and builtin features that make it easy to seed in an 
+SQLAlchemy application.
+
+in this application we already have two migrations, one for our declarative Base, and a second for a table called games.
+
+WHY DO WE NEED SEED DATA?
+IN SQLALCHEMY WEVE have seen how easy it is to write to add data to a databse by using built-in methods that will write SQLcode for us.
+for isntance , to create a new record in the games table, you can have open up the python shell generate a SQLAchemy session create an instance of the GAME model
+commit it to the session.
+to amke it even simler weve used the debug.py file to create a session adn import erlevatn classes.
+
+run debug.py from the app directory and enter the following intot he ipdb shell:
+
+
+
