@@ -1,6 +1,7 @@
-from sqlalchemy import func
+
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import func
 
 Base = declarative_base()
 
@@ -19,3 +20,7 @@ class Game(Base):
         return f'Game(id={self.id}, ' + \
             f'title="{self.title}", ' + \
             f'platform="{self.platform})"'
+    
+    def create_tables(engine):
+        #creating all tables in the databse.
+        Base.metadata.create_all(engine)

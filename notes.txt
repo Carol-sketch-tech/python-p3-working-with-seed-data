@@ -16,4 +16,84 @@ to amke it even simler weve used the debug.py file to create a session adn impor
 run debug.py from the app directory and enter the following intot he ipdb shell:
 
 
+WHY DO WE NEED SEED DATA ?
+we have seen how easy it is to create a new record , create an isntance of the game model.
+and commit ti ti the session.
+to simplify even futher we added a debug.py file to create the sesiion and import relevant classes.
+Ru debug.py fro the lib direcotry and eneter the following onto the ipdb shell :
 
+Note that our bulk_save_obejcgs is a useflul method but it doesnt carry out all the same tasks as add.
+bulk_save_objects does not do the all the tasks that add() method does.
+
+
+Bulk_save_objects does not return any new data from the records it creates.
+ You can set the keyword argument return_defaults = True to get IDs and other automantically assigned attributes,
+  but this requires SQLAlchemy to execute statements 
+ for each record individually.
+
+since the records are saved in the databse rather than in python's memory, we know that even we exit the ipdb shell, 
+well still be able to retrieve this data 
+
+Then how can we save or recover ourdatabase incase the database is deleted?
+we can include the database in version control, but this is genreally considered bad pracitce
+since our databse might get quite larger overtime, its not practical to include it in version control.
+
+the better way and common approach to this problem is that instead of shring the actual databse with other developers we share the isntructions for creating data ins the databse wiht toher developers 
+by convection the way we do this is byc reating a python file, app/seed.py which is sude to populate our database.
+
+weve already seen a similar scenario by which we can share the instructions for setting up a databse with other developers:
+    1. using SQLAchemy migrations to define how the databse tables should look.
+
+now we can have two kinds our table should be set up:
+    1. migrations define how our tables should be set up.
+    2. seeds : add data to those tables.
+
+
+USING THE SEED.py FILE.
+ To use the seed.pt file to add data tot he databse all we need is write code that uses SQLALchemy methods to create new records.
+ Add this to the seed.py  file below the creation  of the sessions object.
+
+    botw = Game(title="Breath of the Wild", platform="Switch", genre="Adventure", price=60)
+    ffvii = Game(title="Final Fantasy VII", platform="Playstation", genre="RPG", price=30)
+    mk8 = Game(title="Mario Kart 8", platform="Switch", genre="Racing", price=50)
+    ccs = Game(title="Candy Crush Saga", platform="Mobile", genre="Puzzle", price=0)
+
+    session.bulk_save_objects([botw, ffvii, mk8])
+    session.commit()
+
+To run this code simply run the command 
+    python seed.py
+
+we could try adding more data in the database / create a new game or row in the database.
+
+weve only added four games in the seed.py file why are there 7 games when we run python lib.seed.py then python lib/debug.py
+    we'll rembember  every time we can run seed.py we are creating new records in the games tables.
+    ther is noting stopping our code from producint duplicate data in the database.
+    we are just instrctuing SQLAlchemy to create new code using this file.
+
+    we can modify our seed to file clear our databse before each new seed to avoid this complocation in the future.
+    add these commands right after the instantiation of your session
+
+        session.query(Game).delete()
+        session.commit()
+
+    these commands remove data from the games table and then re-run the seed file. 
+    it comes in handy of you want to start fresh.
+    Note that just be cautious factoring this into the a seed file, becasue it will enveitablu 
+    remove all your data.
+
+    we can see our fresh datbse with just four records in the games table, as intended 
+
+
+    REGENRATING RANDOMIZED DATA.
+     one challenge of sedding a databse is thinking up lot of sample data.
+     Ultimately you are developng an application, its helpful to have relistic data, but the actual content is not so important.
+
+     one tool that one can use to genrate realistic randomizid data is the Faker library.
+     this librarby is already included int he pipfile for this application so we can try it out.
+     Run python debug.py and try put some faker methods.
+        run the:
+            fake.name() or fake.color() or fake.email() in the ipdb console.
+
+Lets use a fke genrate 50 RANDOM games(we will use the random library to genreate prices)
+replace the dat after our data deletion in the seed.py file with the following code:
